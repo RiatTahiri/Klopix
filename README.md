@@ -1,2 +1,2 @@
 # Klopix
-Social Media App
+Video Sharing Platform
