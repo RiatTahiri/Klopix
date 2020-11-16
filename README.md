@@ -8,6 +8,6 @@ comment on a video etc.
 
 # Technologies Used
 
-**NodeJS + Express ( Backend )**
-**React ( Frontend )**
-**Database ( Mongodb + Mongoose )**
+**NodeJS + Express ( Backend )** <br/>
+**React ( Frontend )** <br/>
+**MongoDB + Mongoose ( Database )**
