@@ -6,10 +6,10 @@ const UserRoutes = require("./routes/User_Routes");
 const db = require("./db.js");
 
 const morgan = require("morgan");
-db.connect;
+// db.connect;
 
 app.use(morgan("dev"));
-app.use("/", UserRoutes);
+app.use("/", UserRoutes); // User Routes
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
