@@ -1,10 +1,11 @@
-import mongoose, { Schema } from "mongoose";
+const mongoose = require("mongoose");
 
-const User_Schema = new Schema({
+const User_Schema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
     min: 5,
+    max: 50,
   },
   email: {
     type: String,

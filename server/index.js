@@ -1,12 +1,12 @@
 const express = require("express");
 const app = express();
 const port = process.env.PORT || 5000;
-const User_Routes
+const UserRoutes = require("./routes/User_Routes");
 
-const database = require("db.js");
+const db = require("./db.js");
 
 const morgan = require("morgan");
-database.connect();
+db.connect;
 
 app.use(morgan("dev"));
 app.use("/", UserRoutes);
