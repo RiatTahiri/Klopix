@@ -10,4 +10,5 @@ comment on a video etc.
 
 **NodeJS + Express ( Backend )** <br/>
 **React ( Frontend )** <br/>
-**MongoDB + Mongoose ( Database )**
+**MongoDB + Mongoose ( Database )** <br/>
+**JWT (Authentication)**
