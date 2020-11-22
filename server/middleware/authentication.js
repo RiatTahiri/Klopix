@@ -5,7 +5,7 @@ module.exports = async function (req, res, next) {
   const token = req.header("AUTH_TOKEN");
 
   if (!token) {
-    return res.status(401).send("Token not found, cant access this route");
+    return res.status(401).send("Token not found, can't access this route");
   }
 
   try {
