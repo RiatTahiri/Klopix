@@ -3,6 +3,8 @@ const bcrypt = require("bcrypt");
 const Joi = require("joi");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv").config();
+const cookie_parser = require("cookie-parser");
+const http_errors = require("http-errors");
 
 const User_Schema = require("../models/User_Schema.js");
 
@@ -13,43 +15,43 @@ const validation = Joi.object({
   profile_picture: Joi.string().min(5).required(),
 });
 
-// exports.login = async (req, res) => {
-//   // After finding the user in database
-//   // Generate a token for user so it can access routes
-//   // if (true) {
-//   //   const assignToken = jwt.verify({ name: user.name }, process.env.AUTH_TOKEN);
-//   // } else {
-//   //   res.send("Email or password is wrong");
-// //   // }
+const login = async (req, res) => {
+  try {
+    const { name, email, password, profile_picture } = req.body;
 
-//   res.send("hello login");
-// };
+    // Check if email exist
 
-const login = async (req,res) => {
-  const { name, email, password, profile_picture } = req.body;
+    user = await User_Schema.findOne({ email: req.body.email });
 
-  // Check if email exist
+    // Decrypt password
 
-  user = await User_Schema.findOne({ email: req.body.email });
-
-  // Decrypt password 
-
-  if(!user) {
-    res.status(400).send('Email doesnt exist');
-  } else {
-    const match = await bcrypt.compare(password, user.password);
-
-    if(match) {
-      const token = jwt.sign({email: email, userId: user._id}, process.env.AUTH_TOKEN, {
-        expiresIn: "1h"
-      });
-
-      res.send('Logged in and token assigned ' + token);
+    if (!user) {
+      res.status(400).send("Email does not exist");
     } else {
-      res.status(400).send('Incorrect password')
+      const match = await bcrypt.compare(password, user.password);
+
+      if (match) {
+        const token = jwt.sign(
+          { email: email, userId: user._id },
+          process.env.AUTH_TOKEN,
+          {
+            expiresIn: "1h",
+          }
+        );
+        const cook = res.cookie("COOKIE_TOKEN", token, {
+          expire: new Date() + 9999,
+        });
+
+        res.send("Successfully Logged In");
+        res.redirect("/logged");
+      } else {
+        res.status(400).send("Incorrect password");
+      }
     }
+  } catch (err) {
+    res.send(err);
   }
-}
+};
 
 const register = async (req, res, next) => {
   const { error } = await validation.validate(req.body);
@@ -74,18 +76,24 @@ const register = async (req, res, next) => {
 
   try {
     const userSaved = await user.save();
-    res.send('User saved successfully.' + userSaved);
+    res.send("Account created successfully." + userSaved);
   } catch (err) {
-    res.status(400).send("There is a error: ", err);
+    res.status(400).send("There is a error: " + err);
   }
 };
 
-const posts = (req,res) => {
-  res.send('Hello World form posts')
-}
+const signOut = (req, res) => {
+  res.clearCookie("COOKIE_TOKEN");
+  res.send("Signed Out");
+};
+
+const logged = (req, res) => {
+  res.send("Welcome you just logged in");
+};
 
 module.exports = {
   register,
   login,
-  posts
-}
+  signOut,
+  logged,
+};
