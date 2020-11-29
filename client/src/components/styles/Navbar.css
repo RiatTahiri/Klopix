@@ -1,0 +1,10 @@
+#main {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+#logo h3 {
+  font-size: 1.8rem;
+}

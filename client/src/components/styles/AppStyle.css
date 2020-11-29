@@ -1,0 +1,6 @@
+#main_style {
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(rgba(21, 102, 100, 0.5), transparent);
+  background-color: lightblue; /*this your primary color*/
+}

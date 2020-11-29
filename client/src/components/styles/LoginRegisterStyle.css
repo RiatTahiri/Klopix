@@ -1,0 +1,22 @@
+#main {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+h3 {
+  font-size: 3rem;
+}
+
+input {
+  padding: 0.7rem;
+  margin: 0.3rem;
+  font-size: 1.2rem;
+}
+
+#submit_button {
+  position: relative;
+  left: 70px;
+}
