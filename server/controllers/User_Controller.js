@@ -17,13 +17,13 @@ const validation = Joi.object({
 
 const login = async (req, res) => {
   try {
-    const { name, email, password, profile_picture } = req.body;
+    const { logInemail, logInpassword } = req.body;
 
     // Check if email exist
 
-    const user = await User_Schema.findOne({ email: req.body.email });
+    const user = await User_Schema.findOne({ email: logInemail });
     
-    if(!email && !password) {
+    if(!logInemail && !logInpassword) {
       console.log('empty')
       res.status(404).send('Email and Password Fields Are Empty');
     }
@@ -31,11 +31,11 @@ const login = async (req, res) => {
     if (!user) {
       res.status(404).send(`Email doesn't not exist`);
     } else {
-      const match = await bcrypt.compare(password, user.password);
+      const match = await bcrypt.compare(logInpassword, user.password);
 
       if (match) {
         const token = jwt.sign(
-          { email: email, userId: user._id },
+          { email: logInemail, userId: user._id },
           process.env.AUTH_TOKEN,
           {
             expiresIn: "1h",
@@ -59,12 +59,12 @@ const register = async (req, res, next) => {
   const { error } = await validation.validate(req.body);
 
   if (error) {
-    return res.status(400).send("Something wrong with validation");
+    return res.status(404).send(error.details[0].message);
   }
 
   checkEmail = await User_Schema.findOne({ email: req.body.email });
 
-  if (checkEmail) return res.status(400).send("Email already exists");
+  if (checkEmail) return res.status(404).send("Email already exists");
 
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(req.body.password, salt);
@@ -78,9 +78,9 @@ const register = async (req, res, next) => {
 
   try {
     const userSaved = await user.save();
-    res.send("Account created successfully." + userSaved);
+    res.send("Account created successfully.");
   } catch (err) {
-    res.status(400).send("There is a error: " + err);
+    res.status(404).send("There is a error: " + err);
   }
 };
 
@@ -89,8 +89,13 @@ const profile = (req, res) => {
 };
 
 const signOut = (req, res) => {
-  res.clearCookie("COOKIE_TOKEN");
-  res.send("Signed Out");
+  const resCookie = res.clearCookie("COOKIE_TOKEN");
+
+  if(resCookie != '') {
+    res.send("Signed Out"); 
+  } else {
+    res.status(404).send(`Account wasn't logged in.`)
+  }
 };
 
 module.exports = {
