@@ -12,41 +12,45 @@ const api = axios.create({
 
 const LoginRegisterLayout = () => {
   // Register State
-  const [nameReg, setNameReg] = useState("");
-  const [passwordReg, setPasswordReg] = useState("");
-  const [emailReg, setEmailReg] = useState("");
-
-  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+
+  const [logInemail, setLogInEmail] = useState("");
+  const [logInpassword, setLogInPassword] = useState("");
 
   const [serverResponse, setServerResponse] = useState([]);
   const history = useHistory();
 
   const register = async (e) => {
     e.preventDefault();
-    await api
-      .post("/register", {
-        name: nameReg,
-        email: emailReg,
-        password: passwordReg,
-        profile_picture: "default.jpg",
+
+    const profile_picture = 'default.jpg'
+
+    const res = await api
+      .post("/register", {name, password, email, profile_picture}, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
       })
-      .then((res) => {
-        console.log(res);
-        setServerResponse(res);
+      .then((response) => {
+        console.log(response.data);
+        setServerResponse([response.data]);
       })
-      .catch((err) => {
-        setServerResponse(err);
+      .catch((error) => {
+        console.log(error.response.data);
+        setServerResponse(error.response.data);
       });
   };
 
   const login = async (e) => {
     e.preventDefault();
 
-    console.log(email, password);
+    console.log(logInemail, logInpassword);
 
       const res = await api
-        .post("/login", {email, password}, {
+        .post("/login", {logInemail, logInpassword}, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -83,17 +87,17 @@ const LoginRegisterLayout = () => {
           <input
             type="email"
             placeholder="Email"
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
+            onChange={(e) => setLogInEmail(e.target.value)}
+            value={logInemail}
           ></input>
           <br />
           <input
             type="password"
             placeholder="Password"
             onChange={(e) => {
-              setPassword(e.target.value);
+              setLogInPassword(e.target.value);
             }}
-            value={password}
+            value={logInpassword}
           ></input>
           <br />
           <button onClick={login} className='login_button'>Login</button>
@@ -106,19 +110,19 @@ const LoginRegisterLayout = () => {
           <input
             type="text"
             placeholder="Username"
-            onChange={(e) => setNameReg(e.target.value)}
+            onChange={(e) => setName(e.target.value)}
           ></input>
           <br />
           <input
             type="email"
             placeholder="Email"
-            onChange={(e) => setEmailReg(e.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
           ></input>
           <br />
           <input
             type="password"
             placeholder="Password"
-            onChange={(e) => setPasswordReg(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
           ></input>
           <br />
           <button onClick={register} className='register_button'>Register</button>
