@@ -21,12 +21,15 @@ const login = async (req, res) => {
 
     // Check if email exist
 
-    user = await User_Schema.findOne({ email: req.body.email });
-
-    // Decrypt password
+    const user = await User_Schema.findOne({ email: req.body.email });
+    
+    if(!email && !password) {
+      console.log('empty')
+      res.status(404).send('Email and Password Fields Are Empty');
+    }
 
     if (!user) {
-      res.status(400).send("Email does not exist");
+      res.status(404).send(`Email doesn't not exist`);
     } else {
       const match = await bcrypt.compare(password, user.password);
 
@@ -38,18 +41,17 @@ const login = async (req, res) => {
             expiresIn: "1h",
           }
         );
-        const cook = res.cookie("COOKIE_TOKEN", token, {
+        const cook = res.cookie("COOKIE_TOKEN", token, {httpOnly: true} , {
           expire: new Date() + 9999,
         });
 
-        res.send("Successfully Logged In");
-        res.redirect("/logged");
+        res.redirect('profile')
       } else {
-        res.status(400).send("Incorrect password");
+        res.status(400).send("Incorrect Password");
       }
     }
   } catch (err) {
-    res.send(err);
+    res.status(404).send(err);
   }
 };
 
@@ -82,18 +84,18 @@ const register = async (req, res, next) => {
   }
 };
 
+const profile = (req, res) => {
+  res.send("Welcome you just logged in");
+};
+
 const signOut = (req, res) => {
   res.clearCookie("COOKIE_TOKEN");
   res.send("Signed Out");
-};
-
-const logged = (req, res) => {
-  res.send("Welcome you just logged in");
 };
 
 module.exports = {
   register,
   login,
   signOut,
-  logged,
+  profile,
 };
