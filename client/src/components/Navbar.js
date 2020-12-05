@@ -1,4 +1,5 @@
 import React from "react";
+import { AiOutlineUser } from 'react-icons/ai'
 
 import SearchBar from "./SearchBar.js";
 import "./styles/Navbar.css";
@@ -6,14 +7,18 @@ import "./styles/Navbar.css";
 const Navbar = () => {
   return (
     <div id="main">
-      <div id="logo">
-        <h3>Klopix</h3>
-      </div>
+      <div className='container'>
 
-      <SearchBar />
+        <div id="logo">
+          <h2>Klopix</h2>
+        </div>
 
-      <div id="account">
-        <h4>Account Settings</h4>
+        <SearchBar />
+
+        <div id="account">
+          <AiOutlineUser size={35} style={{fill: 'white'}}/>
+        </div>
+        
       </div>
     </div>
   );

@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useHistory, Link, Route, Switch, BrowserRouter, Redirect } from "react-router-dom";
+import Button from '@material-ui/core/Button';
 
 import "./styles/LoginRegisterStyle.css";
+import HomePage from "./HomePage.js";
 
 const api = axios.create({
   baseURL: "http://localhost:4000/user/",
@@ -16,7 +19,8 @@ const LoginRegisterLayout = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const [response, setResponse] = useState("");
+  const [serverResponse, setServerResponse] = useState([]);
+  const history = useHistory();
 
   const register = async (e) => {
     e.preventDefault();
@@ -29,10 +33,10 @@ const LoginRegisterLayout = () => {
       })
       .then((res) => {
         console.log(res);
-        setResponse(res);
+        setServerResponse(res);
       })
       .catch((err) => {
-        setResponse(err);
+        setServerResponse(err);
       });
   };
 
@@ -41,32 +45,41 @@ const LoginRegisterLayout = () => {
 
     console.log(email, password);
 
-    const data = {
-      email: email,
-      password: password,
-    };
+      const res = await api
+        .post("/login", {email, password}, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        .then((response) => {
+          localStorage.setItem('AUTH_TOKEN', response.data.token);
 
-    const res = await api
-      .post("/login", data)
-      .then((res) => {
-        console.log(res.data);
-        setResponse(res.data);
-      })
-      .catch((err) => {
-        console.log(err.res);
-      });
-
-    setEmail("");
-    setPassword("");
+          console.log(response.data);
+          console.log(typeof response.data);
+          setServerResponse([response.data]);
+        })
+        .catch((error) => {
+            console.log(error.response.data);
+            setServerResponse(error.response.data)
+        });
   };
+
+  const logOut = async (e) => {
+    e.preventDefault();
+
+    const res = await api.get('/signout').then((res) => {
+      setServerResponse(res.data);
+      console.log(res.data);
+    })
+  }
 
   return (
     <div id="main">
-      <h3>Klopix</h3>
+      <h1>Klopix</h1>
       <div className="login_div">
-        <h4>Login</h4>
+        <h2>Login</h2>
         <form>
-          <br />
           <input
             type="email"
             placeholder="Email"
@@ -83,12 +96,12 @@ const LoginRegisterLayout = () => {
             value={password}
           ></input>
           <br />
-          <button onClick={login}>Login</button>
+          <button onClick={login} className='login_button'>Login</button>
         </form>
-        <h4>{response}</h4>
       </div>
+      <button onClick={logOut}>Log Out</button>
       <div className="register_div">
-        <h4>Register</h4>
+        <h2>Register</h2>
         <form>
           <input
             type="text"
@@ -108,9 +121,14 @@ const LoginRegisterLayout = () => {
             onChange={(e) => setPasswordReg(e.target.value)}
           ></input>
           <br />
-          <button onClick={register}>Register</button>
+          <button onClick={register} className='register_button'>Register</button>
           {/* <h4>{response}</h4> */}
         </form>
+      </div>
+
+      <div id='response_messages'>
+        {/* <div>{serverResponse.map((res,i) => <li key={i}>{res}</li>)}</div> */}
+        <strong className='error-messages'>{serverResponse}</strong>      
       </div>
     </div>
   );

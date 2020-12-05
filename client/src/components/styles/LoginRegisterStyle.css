@@ -1,13 +1,50 @@
 #main {
   display: flex;
   flex-direction: column;
-  flex-wrap: wrap;
+  align-items: center; 
   justify-content: center;
-  align-items: center;
+  text-align: center;
 }
 
-h3 {
+#main h1 {
   font-size: 3rem;
+  padding: 2rem;
+}
+
+.login_div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.login_div h2{
+  margin: 1rem;
+}
+
+.register_div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 2.5rem;
+}
+
+.login_button {
+  padding: 0.4rem;
+  margin: 0.4rem;
+  font-size: 1.1rem;
+  
+}
+
+.register_button {
+  padding: 0.4rem;
+  font-size: 1.1rem;
+  margin: 0.4rem;
+}
+
+.register_div h2{
+  margin: 1rem;
 }
 
 input {
@@ -16,7 +53,10 @@ input {
   font-size: 1.2rem;
 }
 
-#submit_button {
-  position: relative;
-  left: 70px;
+.error-messages {
+  font-size: 1.2rem;
+}
+
+#response_messages {
+  margin: 2.5rem;
 }

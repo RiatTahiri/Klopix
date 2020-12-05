@@ -8,8 +8,6 @@ import SideBar from "./components/SideBar.js";
 const App = () => {
   return (
     <div id="main_style">
-      {/* <Navbar />
-      <SideBar /> */}
       <LoginRegisterLayout />
     </div>
   );

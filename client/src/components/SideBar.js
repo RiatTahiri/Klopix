@@ -5,12 +5,14 @@ import "./styles/SideBar.css";
 function SideBar() {
   return (
     <div id="main">
-      <ul>
+      {/* <ul>
         <li>Home</li>
         <li>Your Videos</li>
         <li>Trending</li>
         <li>Liked Videos</li>
-      </ul>
+      </ul> */}
+
+      <p>hello</p>
     </div>
   );
 }
