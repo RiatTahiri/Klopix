@@ -4,7 +4,6 @@ const Joi = require("joi");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv").config();
 const cookie_parser = require("cookie-parser");
-const http_errors = require("http-errors");
 
 const User_Schema = require("../models/User_Schema.js");
 
@@ -19,17 +18,15 @@ const login = async (req, res) => {
   try {
     const { logInemail, logInpassword } = req.body;
 
-    // Check if email exist
-
     const user = await User_Schema.findOne({ email: logInemail });
-    
-    if(!logInemail && !logInpassword) {
-      console.log('empty')
-      res.status(404).send('Email and Password Fields Are Empty');
+
+    if (!logInemail && !logInpassword) {
+      console.log("empty");
+      res.status(404).json("Email and Password Fields Are Empty");
     }
 
     if (!user) {
-      res.status(404).send(`Email doesn't not exist`);
+      res.status(404).json(`Email doesn't not exist`);
     } else {
       const match = await bcrypt.compare(logInpassword, user.password);
 
@@ -41,21 +38,31 @@ const login = async (req, res) => {
             expiresIn: "1h",
           }
         );
-        const cook = res.cookie("COOKIE_TOKEN", token, {httpOnly: true} , {
-          expire: new Date() + 9999,
-        });
 
-        res.redirect('profile')
+        res
+          .cookie("accessToken", token, {
+            httpOnly: true,
+            expires: new Date(Date.now() + 99999999),
+            secure: false,
+          })
+          .status(200)
+          .json({
+            message: "Signed In",
+            success: true,
+            token,
+          });
       } else {
-        res.status(400).send("Incorrect Password");
+        res.status(404).json({ message: "Incorrect Password", success: false });
       }
     }
   } catch (err) {
-    res.status(404).send(err);
+    res
+      .status(404)
+      .json({ message: `There was a error ${err}`, success: false });
   }
 };
 
-const register = async (req, res, next) => {
+const register = async (req, res) => {
   const { error } = await validation.validate(req.body);
 
   if (error) {
@@ -64,7 +71,10 @@ const register = async (req, res, next) => {
 
   checkEmail = await User_Schema.findOne({ email: req.body.email });
 
-  if (checkEmail) return res.status(404).send("Email already exists");
+  if (checkEmail)
+    return res
+      .status(404)
+      .json({ message: "Email already exists", success: false });
 
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(req.body.password, salt);
@@ -78,23 +88,56 @@ const register = async (req, res, next) => {
 
   try {
     const userSaved = await user.save();
-    res.send("Account created successfully.");
+    res
+      .status(200)
+      .json({ message: "Account created successfully.", success: true });
   } catch (err) {
-    res.status(404).send("There is a error: " + err);
+    res.status(404).send({ message: err, success: false });
   }
 };
 
-const profile = (req, res) => {
-  res.send("Welcome you just logged in");
+const userById = async (req, res) => {
+  await User_Schema.findById(req.params.id)
+    .then((data) => {
+      console.log(data);
+    })
+    .catch((err) => console.log(err));
+};
+
+const checkToken = (req, res) => {
+  res.send("Accessed");
+};
+
+const homepage = (req, res) => {
+  // User_Schema.findById(req.params.id)
+  //   .then((response) => {
+  //     console.log(response);
+  //   })
+  //   .catch((error) => {
+  //     console.log(error);
+  //   });
+
+  res.send("welcome to homepage authed");
+};
+
+const comment = (req, res) => {
+  const { name, comment } = req.body;
+
+  if (!name && !comment) {
+    res.send("fields cannot be empty");
+  }
+
+  console.log(req.user);
+  console.log("perfect");
 };
 
 const signOut = (req, res) => {
-  const resCookie = res.clearCookie("COOKIE_TOKEN");
+  const resCookie = res.clearCookie("access_token");
 
-  if(resCookie != '') {
-    res.send("Signed Out"); 
+  if (resCookie) {
+    res.status(200).json({ message: "Signed Out", success: true });
   } else {
-    res.status(404).send(`Account wasn't logged in.`)
+    res.status(404).json(`Account wasn't logged in.`);
   }
 };
 
@@ -102,5 +145,8 @@ module.exports = {
   register,
   login,
   signOut,
-  profile,
+  checkToken,
+  userById,
+  homepage,
+  comment,
 };
