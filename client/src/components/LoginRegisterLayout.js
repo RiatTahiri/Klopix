@@ -1,139 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useHistory, Link, Route, Switch, BrowserRouter, Redirect } from "react-router-dom";
-import Button from '@material-ui/core/Button';
+import jwtDecode from "jwt-decode";
+import { Link, Route, Switch, BrowserRouter as Router } from "react-router-dom";
 
 import "./styles/LoginRegisterStyle.css";
-import HomePage from "./HomePage.js";
+import Login from "./Login";
+import Register from "./Register";
 
-const api = axios.create({
-  baseURL: "http://localhost:4000/user/",
-});
+import HomePage from "./HomePage";
+
+const Home = () => {
+  return (
+    <div>
+      <h1>index page</h1>
+    </div>
+  );
+};
 
 const LoginRegisterLayout = () => {
-  // Register State
-  const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
-
-  const [logInemail, setLogInEmail] = useState("");
-  const [logInpassword, setLogInPassword] = useState("");
-
-  const [serverResponse, setServerResponse] = useState([]);
-  const history = useHistory();
-
-  const register = async (e) => {
-    e.preventDefault();
-
-    const profile_picture = 'default.jpg'
-
-    const res = await api
-      .post("/register", {name, password, email, profile_picture}, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      .then((response) => {
-        console.log(response.data);
-        setServerResponse([response.data]);
-      })
-      .catch((error) => {
-        console.log(error.response.data);
-        setServerResponse(error.response.data);
-      });
-  };
-
-  const login = async (e) => {
-    e.preventDefault();
-
-    console.log(logInemail, logInpassword);
-
-      const res = await api
-        .post("/login", {logInemail, logInpassword}, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })
-        .then((response) => {
-          localStorage.setItem('AUTH_TOKEN', response.data.token);
-
-          console.log(response.data);
-          console.log(typeof response.data);
-          setServerResponse([response.data]);
-        })
-        .catch((error) => {
-            console.log(error.response.data);
-            setServerResponse(error.response.data)
-        });
-  };
-
-  const logOut = async (e) => {
-    e.preventDefault();
-
-    const res = await api.get('/signout').then((res) => {
-      setServerResponse(res.data);
-      console.log(res.data);
-    })
-  }
-
   return (
     <div id="main">
-      <h1>Klopix</h1>
-      <div className="login_div">
-        <h2>Login</h2>
-        <form>
-          <input
-            type="email"
-            placeholder="Email"
-            onChange={(e) => setLogInEmail(e.target.value)}
-            value={logInemail}
-          ></input>
-          <br />
-          <input
-            type="password"
-            placeholder="Password"
-            onChange={(e) => {
-              setLogInPassword(e.target.value);
-            }}
-            value={logInpassword}
-          ></input>
-          <br />
-          <button onClick={login} className='login_button'>Login</button>
-        </form>
-      </div>
-      <button onClick={logOut}>Log Out</button>
-      <div className="register_div">
-        <h2>Register</h2>
-        <form>
-          <input
-            type="text"
-            placeholder="Username"
-            onChange={(e) => setName(e.target.value)}
-          ></input>
-          <br />
-          <input
-            type="email"
-            placeholder="Email"
-            onChange={(e) => setEmail(e.target.value)}
-          ></input>
-          <br />
-          <input
-            type="password"
-            placeholder="Password"
-            onChange={(e) => setPassword(e.target.value)}
-          ></input>
-          <br />
-          <button onClick={register} className='register_button'>Register</button>
-          {/* <h4>{response}</h4> */}
-        </form>
-      </div>
+      <h1 id="title">Klopix</h1>
+      {/* 
+      <Login />
+      <Register /> */}
 
-      <div id='response_messages'>
-        {/* <div>{serverResponse.map((res,i) => <li key={i}>{res}</li>)}</div> */}
-        <strong className='error-messages'>{serverResponse}</strong>      
-      </div>
+      {/* <Router> */}
+      {/* <Link to="/homepage">Home</Link> */}
+
+      {/* <Switch>
+          <Route path="/" exact component={Home}></Route>
+          <Route path="/homepage" component={HomePage}></Route>
+        </Switch>
+      </Router> */}
     </div>
   );
 };

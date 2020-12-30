@@ -1,0 +1,33 @@
+#login_div {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#response_messages {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 3rem;
+  font-size: 1.2rem;
+}
+
+.login_title {
+  font-size: 1.7rem;
+  margin: 1.6rem;
+}
+
+.login_inputs {
+  margin: 0.6rem;
+  padding: 1rem;
+}
+
+.login_button {
+  display: flex;
+  margin: 0 auto;
+  padding: 0.5rem;
+}
