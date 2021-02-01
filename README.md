@@ -1,4 +1,5 @@
 # Klopix
+
 Video Sharing Platform
 
 This project is just for learning and training Backend Technologies and Frontend Technologies.
@@ -9,6 +10,7 @@ comment on a video etc.
 # Technologies Used
 
 **NodeJS + Express ( Backend )** <br/>
-**React ( Frontend )** <br/>
+**React + Hooks ( Frontend )** <br/>
 **MongoDB + Mongoose ( Database )** <br/>
-**JWT (Token Based Authentication)**
+**JWT (Token Based Authentication)** <br />
+**Multer and (Cloudinary - Storing Videos)**
