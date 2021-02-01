@@ -7,7 +7,13 @@ const Video_Schema = new mongoose.Schema({
     max: 150,
     required: true,
   },
-  videoDesc: {
+  videoUrl: {
+    type: String,
+    min: 5,
+    max: 1024,
+    required: true,
+  },
+  videoDescription: {
     type: String,
     min: 5,
     max: 300,
@@ -39,6 +45,10 @@ const Video_Schema = new mongoose.Schema({
     max: 1024,
     required: true,
   },
+  views: {
+    type: Number,
+    default: 0,
+  },
 });
 
-module.exports = mongoose.Model("Video", Video_Schema);
+module.exports = mongoose.model("Video", Video_Schema);

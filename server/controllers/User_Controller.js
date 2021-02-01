@@ -6,64 +6,61 @@ const dotenv = require("dotenv").config();
 const cookie_parser = require("cookie-parser");
 
 const User_Schema = require("../models/User_Schema.js");
-
-const validation = Joi.object({
-  name: Joi.string().max(50).min(5).required(),
-  email: Joi.string().email().min(5).required(),
-  password: Joi.string().min(5).max(1024).required(),
-  profile_picture: Joi.string().min(5).required(),
-});
+const { UserValidation } = require("../validation");
 
 const login = async (req, res) => {
-  try {
-    const { logInemail, logInpassword } = req.body;
+  // try {
+  const { logInemail, logInpassword } = req.body;
 
-    const user = await User_Schema.findOne({ email: logInemail });
+  const user = await User_Schema.findOne({ email: logInemail });
 
-    if (!logInemail && !logInpassword) {
-      console.log("empty");
-      res.status(404).json("Email and Password Fields Are Empty");
-    }
-
-    if (!user) {
-      res.status(404).json(`Email doesn't not exist`);
-    } else {
-      const match = await bcrypt.compare(logInpassword, user.password);
-
-      if (match) {
-        const token = jwt.sign(
-          { email: logInemail, userId: user._id },
-          process.env.AUTH_TOKEN,
-          {
-            expiresIn: "1h",
-          }
-        );
-
-        res
-          .cookie("accessToken", token, {
-            httpOnly: true,
-            expires: new Date(Date.now() + 99999999),
-            secure: false,
-          })
-          .status(200)
-          .json({
-            message: "Signed In",
-            success: true,
-            token,
-          });
-      } else {
-        res.status(404).json({ message: "Incorrect Password", success: false });
-      }
-    }
-  } catch (err) {
+  if (!logInemail && !logInpassword) {
     res
       .status(404)
-      .json({ message: `There was a error ${err}`, success: false });
+      .json({ message: "Email and Password Fields Are Empty", success: false });
   }
+
+  if (!user) {
+    res
+      .status(404)
+      .json({ message: `Email doesn't not exist`, success: false });
+  } else {
+    const match = await bcrypt.compare(logInpassword, user.password);
+
+    if (match) {
+      const token = jwt.sign(
+        { email: logInemail, userId: user._id },
+        process.env.AUTH_TOKEN,
+        {
+          expiresIn: "1h",
+        }
+      );
+
+      res
+        .cookie("accessToken", token, {
+          httpOnly: true,
+          expires: new Date(Date.now() + 99999999),
+          secure: false,
+        })
+        .status(200)
+        .json({
+          message: "Signed In",
+          success: true,
+          token,
+        });
+    } else {
+      res.status(404).json({ message: "Incorrect Password", success: false });
+    }
+  }
+  // } catch (err) {
+  //   res
+  //     .status(404)
+  //     .json({ message: `There was a error ${err}`, success: false });
+  // }
 };
 
 const register = async (req, res) => {
-  const { error } = await validation.validate(req.body);
+  const { error } = await UserValidation.validate(req.body);
 
   if (error) {
     return res.status(404).send(error.details[0].message);
@@ -132,13 +129,33 @@ const comment = (req, res) => {
 };
 
 const signOut = (req, res) => {
-  const resCookie = res.clearCookie("access_token");
+  const resCookie = res.clearCookie("accessToken");
 
-  if (resCookie) {
-    res.status(200).json({ message: "Signed Out", success: true });
-  } else {
+  if (!resCookie) {
     res.status(404).json(`Account wasn't logged in.`);
+  } else {
+    res.status(200).json({ message: "Signed Out", success: true });
   }
+};
+
+const myChannel = async (req, res) => {
+  const channel = await User_Schema.findOne({ _id: req.user.userId })
+    .then(({ name, profile_picture, _id, createdAccount }) => {
+      res.send({ name, profile_picture, _id, createdAccount });
+    })
+    .catch((error) => {
+      res.send(error);
+    });
+};
+
+const videoPostedBy = async (req, res) => {
+  const user = await User_Schema.findById({ _id: req.params.id })
+    .then(({ name, profile_picture }) => {
+      res.send({ name, profile_picture });
+    })
+    .catch((error) => {
+      res.send(error);
+    });
 };
 
 module.exports = {
@@ -149,4 +166,6 @@ module.exports = {
   userById,
   homepage,
   comment,
+  myChannel,
+  videoPostedBy,
 };

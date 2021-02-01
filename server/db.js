@@ -7,7 +7,7 @@ const connectDatabase = () => {
       process.env.MONGO_KEY,
       { useNewUrlParser: true, useUnifiedTopology: true },
       () => {
-        console.log("Connected To Database!!");
+        console.log("Database success!!");
       }
     );
   } catch (err) {

@@ -1,5 +1,4 @@
 const express = require("express");
-const cookie_parser = require("cookie-parser");
 const auth = require("../middleware/authentication.js");
 
 const router = express.Router();
@@ -11,7 +10,9 @@ router.post("/login", User_Controller.login);
 router.get("/signout", User_Controller.signOut);
 router.get("/userID/:id", User_Controller.userById);
 router.get("/checkToken", auth, User_Controller.checkToken);
-router.get("/homepage", auth, User_Controller.homepage);
-router.post("/comment", auth, User_Controller.comment);
+// router.get("/channel/:id");
+// router.get("/channelSettings:id", auth);
+router.get("/myChannel", auth, User_Controller.myChannel);
+router.get("/videoPostedBy/:id", auth, User_Controller.videoPostedBy);
 
 module.exports = router;
