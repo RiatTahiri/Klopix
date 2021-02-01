@@ -1,0 +1,6 @@
+#homepage_main {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  float: right;
+}

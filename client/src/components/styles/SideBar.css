@@ -1,11 +1,22 @@
-
-/* 
-ul {
-  list-style: none;
+#sidebar {
+  width: 200px;
+  height: 100%;
+  background-color: rgba(30, 106, 163, 0.788);
+  position: fixed;
+  left: 0;
 }
 
-ul li {
-  padding: 0.7rem;
-  text-align: center;
-  font-size: 1.4rem;
-} */
+.sidebar_ul {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  list-style: none;
+  margin: 1rem;
+}
+
+.sidebar_li {
+  color: white;
+  padding: 1rem;
+  font-size: 1.1rem;
+}

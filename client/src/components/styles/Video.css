@@ -1,0 +1,43 @@
+.video_info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 300px;
+}
+
+.real_video {
+  display: flex;
+  justify-content: flex-start;
+  margin-left: 3rem;
+  align-items: center;
+}
+
+.like_dislike_div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin: 1rem;
+  font-size: 1.1rem;
+}
+
+.video_views {
+  margin-left: 1rem;
+  font-weight: bold;
+}
+
+#video_title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 0.8rem;
+}
+
+#video_desc {
+  font-size: 1.1rem;
+  padding: 0.7rem;
+}
+
+#video_release_date {
+  font-weight: normal;
+}

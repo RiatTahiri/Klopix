@@ -1,29 +1,35 @@
 import React from "react";
-
-import { Link, Route, Switch, BrowserRouter as Router } from "react-router-dom";
+import {
+  Route,
+  Switch,
+  useParams,
+  BrowserRouter as Router,
+} from "react-router-dom";
 
 import "./components/styles/AppStyle.css";
-import LoginRegisterLayout from "./components/LoginRegisterLayout.js";
-import Navbar from "./components/Navbar.js";
-import SideBar from "./components/SideBar.js";
-import HomePage from "./components/HomePage";
-import Login from "./components/Login";
-import Register from "./components/Register";
-import Profile from "./components/Profile";
-import Auth from "./components/Auth";
-import Video from "./components/Video.js";
+
+import Login from "./components/User/Login";
+import Register from "./components/User/Register";
+import Video from "./components/VideoComponents/Video.js";
+import Index from "./components/Index";
+import UsersVideo from "./components/VideoComponents/UsersVideos";
+import Profile from "./components/User/Profile.js";
+import UploadVideo from "./components/VideoComponents/UploadVideo";
+import Settings from "./components/Settings/Settings.js";
 
 const App = () => {
   return (
     <div id="main_style">
       <Router>
         <Switch>
-          <Route path="/" exact component={Profile}></Route>
-          <Route path="/homepage" component={HomePage}></Route>
+          <Route path="/" exact component={Index}></Route>
           <Route path="/login" component={Login}></Route>
           <Route path="/register" component={Register}></Route>
-          <Route path="/checkToken" component={Auth}></Route>
-          <Route path="/video" component={Video}></Route>
+          <Route path="/myVideos" component={UsersVideo}></Route>
+          <Route path="/profile" component={Profile}></Route>
+          <Route path="/video/:videoID" component={Video}></Route>
+          <Route path="/uploadVideo" component={UploadVideo}></Route>
+          <Route path="/settings" component={Settings}></Route>
         </Switch>
       </Router>
     </div>

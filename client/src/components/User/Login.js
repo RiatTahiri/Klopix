@@ -1,35 +1,32 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Redirect, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+import { Button, TextField, makeStyles } from "@material-ui/core/";
 
-import "./styles/Login.css";
+import "../styles/Login.css";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    "& .MuiTextField-root": {
+      margin: theme.spacing(2),
+      padding: theme.spacing(0.2),
+      width: 200,
+    },
+  },
+}));
 
 const api = axios.create({
   baseURL: "http://localhost:4000/user/",
 });
+
 const Login = () => {
-  const [serverResponse, setServerResponse] = useState([]);
+  const [serverResponse, setServerResponse] = useState("");
   const [logInemail, setLogInEmail] = useState("");
   const [logInpassword, setLogInPassword] = useState("");
 
+  const classes = useStyles();
+
   const history = useHistory();
-
-  // const getToken = async () => {
-  //   return localStorage.getItem("x-access-token");
-  // };
-
-  // const setToken = async (token) => {
-  //   localStorage.setItem("x-access-token", token);
-
-  //   return token;
-  // };
-
-  // const getUser = async () => {
-  //   const token = getToken();
-
-  //   if (token) console.log(token);
-  //   else console.log("not token");
-  // };
 
   const login = async (e) => {
     e.preventDefault();
@@ -49,18 +46,18 @@ const Login = () => {
         // { withCredentials: true }
       )
       .then((response) => {
-        const { token } = response.data;
+        // const { token } = response.data;
 
-        setServerResponse([response.data.message]);
+        setServerResponse(response.data.message);
         // setToken(token);
 
         console.log(response);
-        history.push("homepage");
+        history.push("profile");
         // history.push("homepage");
       })
       .catch((error) => {
         console.log(error);
-        setServerResponse([error]);
+        setServerResponse(error.message);
       });
   };
 
@@ -80,34 +77,40 @@ const Login = () => {
   };
 
   return (
-    <div id="login_div">
+    <div id="Login">
       <h2 className="login_title">Login</h2>
-      <form>
-        <input
-          className="login_inputs"
+      <form className={classes.root}>
+        <TextField
           type="email"
-          placeholder="Email"
-          onChange={(e) => setLogInEmail(e.target.value)}
+          variant="standard"
+          label="Email"
+          onChange={(e) => {
+            setLogInEmail(e.target.value);
+          }}
+          size="medium"
+          className="text_fields"
           value={logInemail}
-        ></input>
+        ></TextField>
         <br />
-        <input
-          className="login_inputs"
+        <TextField
           type="password"
-          placeholder="Password"
+          variant="standard"
+          label="Password"
           onChange={(e) => {
             setLogInPassword(e.target.value);
           }}
+          className="text_fields"
           value={logInpassword}
-        ></input>
+        ></TextField>
         <br />
-        <button onClick={login} className="login_button">
+        <Button onClick={login} variant="contained" color="primary">
           Login
-        </button>
+        </Button>
       </form>
-      <button onClick={logOut} className="logout_button">
+
+      <Button onClick={logOut} variant="contained" color="secondary">
         Log Out
-      </button>
+      </Button>
 
       <div id="response_messages">
         <strong className="error-messages">

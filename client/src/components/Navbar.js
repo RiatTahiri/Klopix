@@ -5,17 +5,21 @@ import SearchBar from "./SearchBar.js";
 import "./styles/Navbar.css";
 
 const Navbar = () => {
+  const popup = () => {};
+
   return (
-    <div id="main">
-      <div className="container">
-        <div id="logo">
+    <div id="navbar_main">
+      <div className="navbar_container">
+        <div id="navbar_logo">
           <h2>Klopix</h2>
         </div>
         <SearchBar />
 
-        <div id="account">
-          <AiOutlineUser size={35} style={{ fill: "white" }} />
-        </div>
+        <button onClick={popup}>
+          <div id="navbar_account">
+            <AiOutlineUser size={35} style={{ fill: "white" }} />
+          </div>
+        </button>
       </div>
     </div>
   );

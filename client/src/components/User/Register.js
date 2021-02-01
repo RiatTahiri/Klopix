@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { Button, TextField, makeStyles } from "@material-ui/core/";
+
+import '../styles/Register.css'
 
 const api = axios.create({
   baseURL: "http://localhost:4000/user/",
@@ -58,27 +61,33 @@ const Register = () => {
     <div id="register_div">
       <h2>Register</h2>
       <form>
-        <input
+        <TextField
           type="text"
-          placeholder="Username"
+          variant='standard'
+          label='Username'
           onChange={(e) => setName(e.target.value)}
-        ></input>
+          value={name}
+        ></TextField>
         <br />
-        <input
+        <TextField
           type="email"
-          placeholder="Email"
+          value={email}
+          label='Email'
+          variant='standard'
           onChange={(e) => setEmail(e.target.value)}
-        ></input>
+        ></TextField>
         <br />
-        <input
+        <TextField
           type="password"
-          placeholder="Password"
+          label='Password'
+          value={password}
+          variant='standard'
           onChange={(e) => setPassword(e.target.value)}
-        ></input>
+        ></TextField>
         <br />
-        <button onClick={register} className="register_button">
+        <Button onClick={register} variant='contained' color='primary' className="register_button">
           Register
-        </button>
+        </Button>
         {/* <h4>{response}</h4> */}
       </form>
 

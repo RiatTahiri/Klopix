@@ -1,16 +1,22 @@
+#navbar_main {
+  background-color: rgba(36, 113, 172, 0.788);
+}
 
-
-/* .container {
-  max-width: 1100px;
-  margin: 0 auto;
+.navbar_container {
   display: flex;
+  flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-around;
   align-items: center;
-  height: 100%;
+  padding: 0.7rem;
+  max-width: 1010px;
+  margin: 0 auto;
 }
 
-#logo h2 {
-  font-size: 1.8rem;
+#navbar_logo {
+  font-size: 1rem;
   color: white;
-} */
+}
+
+#navbar_account {
+}
