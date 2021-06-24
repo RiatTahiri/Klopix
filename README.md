@@ -15,6 +15,7 @@ comment on a video etc.
 **JWT (Token Based Authentication)** <br />
 **Multer and (Cloudinary - Storing Videos)**
 
-Things to add in the future:
-  Build a video recommendation based on user data using machine learning.
+**Things to add in the future:**<br />
+  <br />
+  Build a video recommendation based on user data using machine learning.<br />
   Create a unique and beatiful design.
